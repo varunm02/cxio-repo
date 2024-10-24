@@ -1,0 +1,40 @@
+provider "aws" {
+  region = "us-east-1"
+}
+resource "aws_vpc" "myvpc" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "varun"
+  }
+}
+resource "aws_subnet" "subnettovpc" {
+  vpc_id     = "${aws_vpc.myvpc.id}"
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "sub1"
+  }
+}
+resource "aws_internet_gateway" "mygw" {
+  vpc_id = "${aws_vpc.myvpc.id}"
+
+  tags = {
+    Name = "mygateway"
+  }
+}
+resource "aws_route_table" "example" {
+  vpc_id = "${aws_vpc.myvpc.id}"
+    tags = {
+    Name = "route1"
+  }
+}
+resource "aws_route_table_association" "a" {
+  subnet_id      = aws_subnet.subnettovpc.id
+  route_table_id = aws_route_table.example.id
+}
+resource "aws_route_table_association" "b" {
+  gateway_id     = aws_internet_gateway.mygw.id
+  route_table_id = aws_route_table.example.id
+}

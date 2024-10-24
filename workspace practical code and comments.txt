@@ -1,0 +1,32 @@
+provider "aws" {
+  region = "us-east-1"
+}
+resource "aws_instance" "ec2_instance" {
+    ami = "ami-03a6eaae9938c858c"
+    count = "${var.count}
+        instance_type = "t2.micro"
+    key_name = "jkl"
+		tags = {
+    Name = "ec21"
+  }
+	
+} 
+
+
+##### create variables.tf and add this ####
+variable "count"{
+	default = "1"
+}
+
+## create dev-terraform.tfvar and add this
+counttobe = "2"
+
+##same for test 
+
+## create workspace accordingly and use following commands accordingly ##
+terraform plan --var-file "dev-terraform.tfvar"
+terraform appy --var-file "dev-terraform.tfvar"
+
+##perform similarly by test also 
+
+##refer book for more details##

@@ -1,0 +1,74 @@
+provider "aws" {
+  region = "us-east-1"
+}
+resource "aws_vpc" "this" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "varun"
+  }
+}
+resource "aws_internet_gateway" "firstgw" {
+  vpc_id = "${aws_vpc.this.id}"
+
+  tags = {
+    Name = "main"
+  }
+}
+resource "aws_subnet" "sub1" {
+  vpc_id     = "${aws_vpc.this.id}"
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "subnet_pub"
+  }
+}
+resource "aws_security_group" "sg3" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic"
+  vpc_id      = "${aws_vpc.this.id}"
+
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    
+  }
+  
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    
+  }
+  
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    
+  }
+
+  tags = {
+    Name = "mysg3"
+  }
+}
+resource "aws_instance" "ec2_instance" {
+    ami = "ami-03a6eaae9938c858c"
+    count = 1
+    subnet_id = "${aws_subnet.sub1.id}"
+    instance_type = "t2.micro"
+    key_name = "klp2"
+	security_groups = [aws_security_group.sg3.id]
+	tags = {
+    Name = "ec21"
+  }
+	
+} 

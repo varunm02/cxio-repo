@@ -1,0 +1,4 @@
+https://developer.hashicorp.com/terraform/downloads
+
+
+https://dev.to/aws-builders/how-to-create-an-ec2-instance-on-aws-using-terraform-4lg  ----ec2 creation code

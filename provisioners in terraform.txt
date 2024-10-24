@@ -1,0 +1,4 @@
+https://k21academy.com/terraform-iac/terraform-provisioners/#:~:text=Terraform%20Provisioners%20are%20used%20for,fails%20terraform%20marks%20it%20tainted
+
+https://www.youtube.com/watch?v=gXl2FUBXI90 ----concept
+https://www.youtube.com/watch?v=xZGO7gYGlQY -----practical
